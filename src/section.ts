@@ -22,7 +22,7 @@ export class PoemSection {
 }
 
 export class WorksCitedSection {
-    // TODO
+    // TODO: Implement
 }
 
 function skipNewLines(tokens: PeekableIterator<SyntaxToken>): boolean {
@@ -34,6 +34,7 @@ function skipNewLines(tokens: PeekableIterator<SyntaxToken>): boolean {
     return didSkip;
 }
 
+// TODO: Return other sections too
 function parsePoemSection(tokens: PeekableIterator<SyntaxToken>): PoemSection | null {
     let { value: headerToken, done } = tokens.peek();
     if (done) { return null; }
