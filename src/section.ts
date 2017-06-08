@@ -4,6 +4,7 @@ import {
     Token, SyntaxToken, GrouperToken,
     HeaderToken, WordToken, OpenerToken, CloserToken, NewLineToken
 } from "./tokenize";
+import { group, TokenTree } from "./group"
 
 export class TitleSection {
     constructor(
@@ -15,10 +16,13 @@ export class TitleSection {
 }
 
 export class PoemSection {
+    public bodyGroups: TokenTree[]
     constructor(
         public headerToken: HeaderToken,
         public bodyTokens: (WordToken | GrouperToken)[]
-    ) { }
+    ) {
+        this.bodyGroups = group(bodyTokens);
+    }
 }
 
 export class WorksCitedSection {
