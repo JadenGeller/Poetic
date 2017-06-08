@@ -22,7 +22,9 @@ export class HeaderToken extends Token {
 
 export class WordToken extends Token {
     toNormalized(): string {
-        return this.toString().toLowerCase().replace("'", "_");
+        // Append underscore since we transpile to JS,
+        // which reserves certain words.
+        return "_" + this.toString().toLowerCase().replace("'", "_");
     }
 }
 
