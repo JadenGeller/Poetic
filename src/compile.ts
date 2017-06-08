@@ -21,7 +21,7 @@ export class Module {
     ) { }
 }
 
-export function run(mod: Module, transpile: boolean) {
+export function run(data: string, mod: Module, transpile: boolean) {
 //   console.log(mod.program ? mod.program.toString() : "")
   if (mod.program) {
       const result = codegen(mod.program);

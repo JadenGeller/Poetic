@@ -17,5 +17,5 @@ fs.readFile(program.args[0], 'utf8', function (err, data) {
     return console.log(err);
   }
   const mod = compile(data);
-  run(mod, <boolean>program.transpile);
+  run(data, mod, <boolean>program.transpile);
 });
