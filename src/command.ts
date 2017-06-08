@@ -14,6 +14,7 @@ import fs = require('fs');
 program
     .version('0.0.1')
     .usage('<file>')
+    .option('-t, --transpile', 'Transpile instead of running')
     .parse(process.argv);
 
 // TODO: Other args?
@@ -26,10 +27,18 @@ fs.readFile(program.args[0], 'utf8', function (err, data) {
   if (mod.program) {
       const result = codegen(mod.program);
       if (typeof result == "string") {
+          let fullResult = "// Builtins\n";
           for (let b of mod.builtins) {
-              console.log(b.impl);
+              fullResult += b.impl;
           }
-          console.log(result);
+          fullResult += "\n\n// Program\n"
+          fullResult += result;
+
+          if (program.transpile) {
+              console.log(fullResult);
+          } else {
+              eval(fullResult);
+          }
       } else {
           for (let error of result) {
               const doc = new GridText(data);
