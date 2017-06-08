@@ -60,12 +60,3 @@ fs.readFile(program.args[0], 'utf8', function (err, data) {
       console.log("NO PROGRAM")
   }
 });
-
-
-// const mod = compile(testInput);
-// if (mod.program) {
-//     const code = codegen(mod.program);
-//     console.log(code);
-// }
-
-
