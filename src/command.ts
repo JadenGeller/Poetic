@@ -1,5 +1,5 @@
 
-import { run } from "./compile";
+import { run, compile } from "./compile";
 import { highlightRegions } from "./syntax";
 
 import program = require('commander');
@@ -16,5 +16,6 @@ fs.readFile(program.args[0], 'utf8', function (err, data) {
   if (err) {
     return console.log(err);
   }
-  run(data, <boolean>program.transpile);
+  const mod = compile(data);
+  run(mod, <boolean>program.transpile);
 });
