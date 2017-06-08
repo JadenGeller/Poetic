@@ -1,19 +1,23 @@
 import { Statement, LetIn, Variable, Lambda, Application } from "./parse";
 import { AssertionError } from "./utilities";
 
-export function codegen(expr: Statement): string | null {
+function maybeParen(text: string, shouldParen: boolean): string {
+    return shouldParen ? `(${text})` : text;
+}
+
+export function codegen(expr: Statement, tightlyBound: boolean = false): string | null {
     if (expr instanceof Lambda) {
         if (!expr.variableToken || !expr.body) { return null; }
         const body = codegen(expr.body);
         if (!body) { return null; }
-        return `${expr.variableToken.toNormalized()} => ${body}`;
+        return maybeParen(`${expr.variableToken.toNormalized()} => ${body}`, tightlyBound);
     } else if (expr instanceof Variable) {
         return expr.token.toNormalized();
     } else if (expr instanceof Application) {
-        const func = codegen(expr.lambda);
+        const func = codegen(expr.lambda, true);
         const arg = codegen(expr.argument);
         if (!func || !arg) { return null; }
-        return `(${func})(${arg})`; // Memoized!
+        return `${func}(${arg})`; // Memoized!
     } else if (expr instanceof LetIn) {
         if (!expr.variableToken || !expr.variableValue) { return null; }
         const varValue = codegen(expr.variableValue);
