@@ -67,6 +67,8 @@ fs.readFile(program.args[0], 'utf8', function (err, data) {
                   throw new AssertionError();
               }
           }
+          console.log("\nin program...\n")
+          console.log(mod.program.toString());
       }
   } else {
       console.log("NO PROGRAM")
