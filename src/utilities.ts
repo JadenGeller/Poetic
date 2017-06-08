@@ -22,14 +22,14 @@ export class Interval {
 
 export class Substring {
     constructor(public base: string,
-                private _interval: Interval) { }
+                public interval: Interval) { }
 
-    startIndex(): number { return this._interval.startIndex(); }
-    endIndex():   number { return this._interval.endIndex(); }
+    startIndex(): number { return this.interval.startIndex(); }
+    endIndex():   number { return this.interval.endIndex(); }
 
     public toString = () : string => {
-        return this.base.substring(this._interval.startIndex(),
-                                    this._interval.endIndex());
+        return this.base.substring(this.interval.startIndex(),
+                                   this.interval.endIndex());
     }
 
     // FIXME: Gross; remove?

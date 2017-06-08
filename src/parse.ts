@@ -151,3 +151,18 @@ export function parse(
     }
     return parseGroups(groups);
 }
+
+export function* traverse(expr: Statement): IterableIterator<Statement> {
+    yield expr;
+    if (expr instanceof Lambda) {
+        if (expr.body) { yield expr.body; }
+    } else if (expr instanceof Variable) {
+        // no-op
+    } else if (expr instanceof Application) {
+        yield expr.lambda;
+        yield expr.argument;
+    } else if (expr instanceof LetIn) {
+        if (expr.variableValue) { yield expr.variableValue; }
+        if (expr.body) { yield expr.body; }
+    }
+}
