@@ -2,13 +2,20 @@ import { HighlightType, Highlight, highlightRegions } from "./syntax";
 import { Module, compile } from "./compile";
 import { Interval } from "./utilities"
 
+// Due to inconsistencies in how browsers handle contenteditable divs, this
+// code is only confirmed to work in Firefox.
 
 class AttributedTextBox {
     private currentTagCharCount: number;
+    private internalHTMLState: string;
 
-    constructor(private div: HTMLElement, private internalHTMLState: string) {
-        this.currentTagCharCount = 0;
+    constructor(private div: HTMLElement, initialInput: string) {
         div.contentEditable = "true";
+        div.addEventListener("input", () => this.performSyntaxHighlighting());
+        this.currentTagCharCount = 0;
+        this.internalHTMLState = initialInput;
+        this.commit();
+        this.performSyntaxHighlighting();
     }
 
     commit() {
@@ -40,6 +47,22 @@ class AttributedTextBox {
     markRange(startIndex: number, endIndex: number) {
         this.makeRangeTagged(startIndex, endIndex, "<mark>", "</mark>")
     }
+
+    performSyntaxHighlighting() {
+        this.currentTagCharCount = 0;
+        this.internalHTMLState = this.div.innerText;
+        let text_compiled = compile(this.div.innerText);
+        let text_iterator = highlightRegions(text_compiled);
+        for (let c of text_iterator) {
+            if (c.type == HighlightType.Bold) {
+                this.boldRange(c.region.startIndex(), c.region.endIndex());
+            }
+            else {
+                this.underlineRange(c.region.startIndex(), c.region.endIndex());
+            }
+        }
+        this.commit();
+    }
 }
 
 let poem1 =
@@ -50,20 +73,4 @@ until all is lost.`
 
 const text = new AttributedTextBox(document.getElementById("root")!, poem1);
 
-let poem1_compiled = compile(poem1);
-let poem1_iterator = highlightRegions(poem1_compiled);
-
-for (let c of poem1_iterator) {
-    console.log(c.region);
-    if (c.type == HighlightType.Bold) {
-        text.boldRange(c.region.startIndex(), c.region.endIndex());
-    }
-    else {
-        text.underlineRange(c.region.startIndex(), c.region.endIndex());
-    }
-}
-
-text.commit();
-
 // text.reset();
-
