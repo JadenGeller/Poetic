@@ -17,7 +17,7 @@ export function codegen(expr: Statement, tightlyBound: boolean = false): string 
         const func = codegen(expr.lambda, true);
         const arg = codegen(expr.argument);
         if (!func || !arg) { return null; }
-        return `${func}(${arg})`; // Memoized!
+        return `${func}(${arg})`;
     } else if (expr instanceof LetIn) {
         if (!expr.variableToken || !expr.variableValue) { return null; }
         const varValue = codegen(expr.variableValue);
