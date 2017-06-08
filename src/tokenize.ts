@@ -1,26 +1,23 @@
-import { Substring, Interval } from "./utilities";
+import { Substring, Interval, assert } from "./utilities";
 
 export abstract class Token {
-    constructor(private _substring: Substring) { }
+    constructor(public substring: Substring) { }
 
-    startIndex(): number { return this._substring.startIndex(); }
-    endIndex(): number { return this._substring.endIndex(); }
+    startIndex(): number { return this.substring.startIndex(); }
+    endIndex(): number { return this.substring.endIndex(); }
 
     public toString = (): string => {
-        return this._substring.toString();
+        return this.substring.toString();
     }
 }
 
 export class HeaderToken extends Token {
-    constructor(_contents: Substring,
-                private _innerText: Substring,
-                private _isClosed: boolean) {
-        super(_contents)
+    constructor(substring: Substring,
+                public innerText: Substring,
+                public nameToken: WordToken | undefined,
+                public isClosed: boolean) {
+        super(substring)
     }
-    innerText(): Substring { return this._innerText; }
-
-    // TODO: Make sure that the client warns when this is not true?
-    isClosed(): boolean { return this._isClosed; }
 }
 
 export class WordToken extends Token {
@@ -28,6 +25,7 @@ export class WordToken extends Token {
         return this.toString().toLowerCase();
     }
 }
+
 export class OpenerToken extends Token { }
 export class CloserToken extends Token { }
 export class NewLineToken extends Token { }
@@ -61,14 +59,25 @@ export function* tokenize(text: string): IterableIterator<SyntaxToken> {
         } else if (char == '.') {
             yield new CloserToken(new Substring(text, new Interval(index, index + 1)));
         } else if (char.match(headerDelimiter)) {
-            const startIndex = index;
+            assert(wordStart == -1);
+
+            let nameToken: WordToken | undefined;
+            const headerStart = index;
             index += 1;
             for (let char of charIter) {
+                if (!nameToken && wordStart == -1 && char.match(startWord)) {
+                    wordStart = index;
+                } else if (wordStart > -1 && char.match(endWord)) {
+                    nameToken =  new WordToken(new Substring(text, new Interval(wordStart, index)));
+                    wordStart = -1;
+                }
+
                 if (char.match(headerDelimiter) || char == '\n') {
                     yield new HeaderToken(
-                        /* contents  */ new Substring(text, new Interval(startIndex, index + 1)),
-                        /* innerText */ new Substring(text, new Interval(startIndex + 1, index)),
-                        /* isClosed  */ char.match(headerDelimiter) != null
+                        new Substring(text, new Interval(headerStart, index + 1)),
+                        new Substring(text, new Interval(headerStart + 1, index)),
+                        nameToken,
+                        char.match(headerDelimiter) != null
                     );
                     break;
                 }
