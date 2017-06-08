@@ -26,6 +26,6 @@ export class GridText {
     linecol(targetIndex: number): [number, number] {
         const line = this.line(targetIndex);
         let column = targetIndex - this.lineIndices[line];
-        return [line, column];
+        return [line + 1, column + 1];
     }
 }
