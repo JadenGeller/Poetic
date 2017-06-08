@@ -155,14 +155,14 @@ export function parse(
 export function* traverse(expr: Statement): IterableIterator<Statement> {
     yield expr;
     if (expr instanceof Lambda) {
-        if (expr.body) { yield expr.body; }
+        if (expr.body) { yield* traverse(expr.body); }
     } else if (expr instanceof Variable) {
         // no-op
     } else if (expr instanceof Application) {
-        yield expr.lambda;
-        yield expr.argument;
+        yield* traverse(expr.lambda);
+        yield* traverse(expr.argument);
     } else if (expr instanceof LetIn) {
-        if (expr.variableValue) { yield expr.variableValue; }
-        if (expr.body) { yield expr.body; }
+        if (expr.variableValue) { yield* traverse(expr.variableValue); }
+        if (expr.body) { yield* traverse(expr.body); }
     }
 }
