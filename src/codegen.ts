@@ -32,7 +32,7 @@ export function codegen(expr: Statement, tightlyBound: boolean = false): string 
             const errors: CompileError[] = [];
             if (!expr.variableToken) { errors.push(new ExpectedLambdaBindingNameError(expr)) }
             if (!expr.body)          { errors.push(new ExpectedLambdaBodyError(expr)); }
-            if (body == "object")    { Array.prototype.push.apply(errors, body); }
+            if (typeof body == "object")    { Array.prototype.push.apply(errors, body); }
             return errors;
         }
         return maybeParen(`${escaped(expr.variableToken.toNormalized())} => ${body}`, tightlyBound);
