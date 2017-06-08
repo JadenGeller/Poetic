@@ -1,0 +1,25 @@
+{
+  "name": "Poetic",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JadenGeller/Poetic.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JadenGeller/Poetic/issues"
+  },
+  "homepage": "https://github.com/JadenGeller/Poetic#readme",
+  "devDependencies": {
+    "@types/node": "^7.0.22",
+    "ts-node": "^3.0.4",
+    "typescript": "^2.3.3"
+  }
+}
