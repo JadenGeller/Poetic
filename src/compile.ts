@@ -19,7 +19,7 @@ export function compile(text: string): Module {
     const sections = Array.from(section(tokens[Symbol.iterator]()));
 
     let builtins: BuiltIn[] = [
-        new BuiltIn("materialize", "let _materialize = n => console.log(n(x => x + 1)(0));"),
+        new BuiltIn("materialize", "const _materialize = n => console.log(n(x => x + 1)(0));"),
     ];
 
     let globals: { [key: string]: LetIn | BuiltIn } = {};
