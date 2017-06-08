@@ -25,7 +25,7 @@ export function compile(text: string): Module {
 
         const expr = name ? parse(name, sect.bodyGroups, globals) : undefined;
 
-        const decl = new LetIn(nameToken, expr);
+        const decl = new LetIn(sect.headerToken, nameToken, expr);
         if (name) { globals[name] = decl; }
 
         if (prevDecl) { prevDecl.body = decl; }

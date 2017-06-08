@@ -1,5 +1,5 @@
 import { TokenGroup, TokenTree } from "./group";
-import { Token, WordToken, OpenerToken, CloserToken } from "./tokenize";
+import { Token, WordToken, OpenerToken, CloserToken, HeaderToken } from "./tokenize";
 import { PeekableIterator } from "./utilities";
 
 interface Binder {
@@ -48,16 +48,20 @@ export class Application {
 
 export class LetIn implements Partial<Binder> {
     constructor(
+        public headerToken: HeaderToken,
         public variableToken?: WordToken,
         public variableValue?: Expression,
         public body?: Expression | LetIn
     ) { }
 
-    public toString = (): string => {
+    public toStringExcludingBody(): string {
         const name = this.variableToken ? this.variableToken.toNormalized() : "_";
         const value = this.variableValue ? this.variableValue.toString() : "_";
-        const body = this.body ? this.body.toString() : "_";
-        return `let ${name} = ${value};\n${body}`;
+        return `let ${name} = ${value};`;
+    }
+
+    public toString = (): string => {
+        return `${this.toStringExcludingBody()}\n` + (this.body ? this.body.toString() : "_");
     }
 }
 
