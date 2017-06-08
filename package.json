@@ -20,6 +20,8 @@
   "devDependencies": {
     "@types/node": "^7.0.22",
     "ts-node": "^3.0.4",
-    "typescript": "^2.3.3"
+    "typescript": "^2.3.3",
+    "browserify": "^14.4.0",
+    "tsify": "^3.0.1"
   }
 }
