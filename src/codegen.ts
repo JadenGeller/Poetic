@@ -1,11 +1,11 @@
 import { Statement, LetIn, Variable, Lambda, Application } from "./parse";
 import { AssertionError } from "./utilities";
 
-function maybeParen(text: string, shouldParen: boolean): string {
-    return shouldParen ? `(${text})` : text;
-}
-
 export function codegen(expr: Statement, tightlyBound: boolean = false): string | null {
+    function maybeParen(text: string, shouldParen: boolean): string {
+        return shouldParen ? `(${text})` : text;
+    }
+
     if (expr instanceof Lambda) {
         if (!expr.variableToken || !expr.body) { return null; }
         const body = codegen(expr.body);
