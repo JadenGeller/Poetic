@@ -28,7 +28,7 @@ export function codegen(expr: Statement, tightlyBound: boolean = false): string 
 
     if (expr instanceof Lambda) {
         const body = expr.body ? codegen(expr.body) : undefined;
-        if (!expr.variableToken || !expr.body || body == "object") {
+        if (!expr.variableToken || !expr.body || typeof body == "object") {
             const errors: CompileError[] = [];
             if (!expr.variableToken) { errors.push(new ExpectedLambdaBindingNameError(expr)) }
             if (!expr.body)          { errors.push(new ExpectedLambdaBodyError(expr)); }
