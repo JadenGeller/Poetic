@@ -26,6 +26,9 @@ fs.readFile(program.args[0], 'utf8', function (err, data) {
   if (mod.program) {
       const result = codegen(mod.program);
       if (typeof result == "string") {
+          for (let b of mod.builtins) {
+              console.log(b.impl);
+          }
           console.log(result);
       } else {
           for (let error of result) {

@@ -6,6 +6,10 @@ interface Binder {
     variableToken: WordToken;
 }
 
+export class BuiltIn implements Partial<Binder> {
+    constructor(public name: string, public impl: string) { }
+}
+
 export class Variable {
     constructor(
         public binder: Partial<Binder>,
@@ -99,7 +103,7 @@ class Scope {
 export function parse(
     keyword: string,
     groups: TokenTree[],
-    globals: { [key: string]: LetIn } = {}
+    globals: { [key: string]: LetIn | BuiltIn } = {}
 ): Expression | undefined {
     let scope = new Scope();
 
