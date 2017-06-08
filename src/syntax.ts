@@ -2,7 +2,7 @@ import { traverse, LetIn, Lambda, Variable, Application } from "./parse";
 import { Module } from "./compile";
 import { Interval } from "./utilities"
 
-enum HighlightType {
+export enum HighlightType {
     Bold = 1,
     Underline = 2
 }
